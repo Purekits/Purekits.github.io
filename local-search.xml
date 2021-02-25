@@ -4,6 +4,39 @@
   
   
   <entry>
+    <title>Android视图绑定ViewBinding的使用</title>
+    <link href="/2021/02/25/%E4%BD%BF%E7%94%A8%E8%A7%86%E5%9B%BE%E7%BB%91%E5%AE%9AViewBinding/"/>
+    <url>/2021/02/25/%E4%BD%BF%E7%94%A8%E8%A7%86%E5%9B%BE%E7%BB%91%E5%AE%9AViewBinding/</url>
+    
+    <content type="html"><![CDATA[<h1 id="Android视图绑定ViewBinding的使用"><a href="#Android视图绑定ViewBinding的使用" class="headerlink" title="Android视图绑定ViewBinding的使用"></a>Android视图绑定<code>ViewBinding</code>的使用</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><blockquote><p>在我们的开发过程中需要获取<code>XML</code>布局文件中的<code>ViewId</code>以便其赋值显示，所以我们习惯了使用<code>findViewById</code>进行操作</p><p>从<code>Android Studio 3.6 </code> 开始，视图绑定能够通过生成绑定对象来替代 <code>findViewById</code>，从而可以帮您简化代码、移除 bug，并且从<code>findViewById</code>  的模版代码中解脱出来。</p></blockquote><h2 id="在build-gradle中开启视图绑定"><a href="#在build-gradle中开启视图绑定" class="headerlink" title="在build.gradle中开启视图绑定"></a>在<code>build.gradle</code>中开启视图绑定</h2><blockquote><p>开启视图绑定无需引入任何额外依赖，从<code>Android Studio 3.6</code>开始，视图绑定将会内建于<code>Anroid Gradle</code>插件中。需要打开视图绑定的话只需要在<code>build.gradle</code>文件中配置<code>viewBinding</code>选项</p></blockquote><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs groovy"><span class="hljs-comment">// 需要 Android Gradle Plugin 3.6.0</span><br>android &#123;<br> viewBinding &#123;<br>  enabled = <span class="hljs-literal">true</span><br> &#125;<br>&#125;<br></code></pre></td></tr></table></figure><blockquote><p>在<code>Android Studio 4.0</code>中，<code>viewBinding</code>变成属性被整合到了<code>buildFeatures</code>选项中所以配置要改正；</p></blockquote><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs groovy"><span class="hljs-comment">// Android Studio 4.0</span><br>android &#123;<br> buildFeatures &#123;<br>  viewBinding = <span class="hljs-literal">true</span><br> &#125;<br>&#125;<br></code></pre></td></tr></table></figure><blockquote><p>配置完成后，视图绑定就会为所有布局文件自动生成对应的绑定类。无需修改原有的<code>XML</code>布局文件，视图绑定将根据你现有的布局自动完成所有工作。</p><p>视图绑定将会根据现有的<code>XML</code>布局文件，为<code>Module</code>内所有的布局文件生成绑定对象。</p></blockquote><h2 id="在Activity中使用视图绑定"><a href="#在Activity中使用视图绑定" class="headerlink" title="在Activity中使用视图绑定"></a>在<code>Activity</code>中使用视图绑定</h2><blockquote><p>假设你有一个布局文件叫做<code>activity_main.xml</code>,开启视图绑定后就会自动生成相应的<code>ActivityMainBinding</code>绑定类</p></blockquote><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> io.pure.myapplication;<br><span class="hljs-keyword">import</span> androidx.appcompat.app.AppCompatActivity;<br><span class="hljs-keyword">import</span> android.os.Bundle;<br><span class="hljs-keyword">import</span> io.pure.myapplication.databinding.ActivityMainBinding;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MainActivity</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AppCompatActivity</span> </span>&#123;<br>    <span class="hljs-keyword">private</span> ActivityMainBinding binding;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onCreate</span><span class="hljs-params">(Bundle savedInstanceState)</span> </span>&#123;<br>        <span class="hljs-keyword">super</span>.onCreate(savedInstanceState);<br><br>        <span class="hljs-comment">//通过调用生成的绑定类中包含的静态 inflate() 方法，创建该绑定类的实例以供 Activity使用</span><br>        binding = ActivityMainBinding.inflate(getLayoutInflater());<br>        <span class="hljs-comment">//调用 getRoot() 方法获取对根视图的引用 将根视图传递到 setContentView() 使其成为屏幕上的活动视图</span><br>        setContentView(binding.getRoot());<br>        <span class="hljs-comment">//获取控件ID并执行操作</span><br>        binding.textView01.setText(<span class="hljs-string">&quot;Hello World&quot;</span>);<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure><p><img src="https://raw.githubusercontent.com/PureK1t/hexo_pictures_source/main/image-20210225200047263.png" alt="image-20210225200047263"></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Android</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Android</tag>
+      
+      <tag>Java</tag>
+      
+      <tag>viewBinding</tag>
+      
+      <tag>编程</tag>
+      
+      <tag>水博客</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>初次运行`Git`之前的配置</title>
     <link href="/2021/02/25/%E5%88%9D%E6%AC%A1%E8%BF%90%E8%A1%8CGit%E4%B9%8B%E5%89%8D%E7%9A%84%E9%85%8D%E7%BD%AE/"/>
     <url>/2021/02/25/%E5%88%9D%E6%AC%A1%E8%BF%90%E8%A1%8CGit%E4%B9%8B%E5%89%8D%E7%9A%84%E9%85%8D%E7%BD%AE/</url>
@@ -20,11 +53,11 @@
     
     <tags>
       
+      <tag>水博客</tag>
+      
       <tag>Git</tag>
       
       <tag>Github</tag>
-      
-      <tag>水博客</tag>
       
     </tags>
     
@@ -49,26 +82,13 @@
     
     <tags>
       
-      <tag>水博客</tag>
-      
       <tag>编程</tag>
+      
+      <tag>水博客</tag>
       
       <tag>MYSQL</tag>
       
     </tags>
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title>Hello World</title>
-    <link href="/2021/02/25/hello-world/"/>
-    <url>/2021/02/25/hello-world/</url>
-    
-    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span><br></code></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo server<br></code></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo generate<br></code></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo deploy<br></code></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
-    
-    
     
   </entry>
   
@@ -108,7 +128,7 @@
     <link href="/2020/08/02/%E6%B5%85%E8%B0%88%E9%AB%98%E6%95%B0%E5%92%8C%E7%BC%96%E7%A8%8B/"/>
     <url>/2020/08/02/%E6%B5%85%E8%B0%88%E9%AB%98%E6%95%B0%E5%92%8C%E7%BC%96%E7%A8%8B/</url>
     
-    <content type="html"><![CDATA[<h4 id="浅谈高数和编程"><a href="#浅谈高数和编程" class="headerlink" title="浅谈高数和编程"></a>浅谈高数和编程</h4><p>高数以及其他数学来讲对于变成尤其是应用层编程，都是属于一个充分非必要的条件。</p><p>大部分编程来讲，对于高数的要求能力不高，我们知道程序是由数据结构和算法组成的但是如果不是算法工程师不是研究性的编程、机器学习、人工智能领域以及大数据分析。基本的数学知识就能满足编程尤其是应用层的编程基本很少用到算法和高数的知识，很多时候你要的东西已经被封装好。</p><p>大一就要结束了记得刚开始接触高数的时候，确实觉得力不从心，不知道改怎么学能够将公式运用自如，渐渐的发现，其实那些公式并不是死记硬背才行只要充分理解了各个知识点，遇到题目可以分析出自己的解题思路就能吧题目解出来，所以学习高等数学记忆的负担轻了，还记得当时学习微积分的时候怎么也学不好。看过就忘（学英语也是），不过还好学的还可以，其实我觉得高等数学的学习木的并不是为了所谓的不挂科，因此我们的学习不能停留在接触答案作为目标。我们必须知道解题过程的每一步的依据。最初我们要把定理的内容记住，至少能够做的下来题目，然而我试着认真的推导定理，尽管过程并不轻松但是我却认为非常值得，因为只有通过字的探索的知识才是掌握的最好。</p>]]></content>
+    <content type="html"><![CDATA[<h4 id="浅谈高数和编程"><a href="#浅谈高数和编程" class="headerlink" title="浅谈高数和编程"></a>浅谈高数和编程</h4><p>高数以及其他数学来讲对于变成尤其是应用层编程，都是属于一个充分非必要的条件。</p><p>大部分编程来讲，对于高数的要求能力不高，我们知道程序是由数据结构和算法组成的但是如果不是算法工程师不是研究性的编程、机器学习、人工智能领域以及大数据分析。基本的数学知识就能满足编程尤其是应用层的编程基本很少用到算法和高数的知识，很多时候你要的东西已经被封装好。</p><p>大一就要结束了记得刚开始接触高数的时候，确实觉得力不从心，不知道改怎么学能够将公式运用自如，渐渐的发现，其实那些公式并不是死记硬背才行只要充分理解了各个知识点，遇到题目可以分析出自己的解题思路就能吧题目解出来，所以学习高等数学记忆的负担轻了，还记得当时学习微积分的时候怎么也学不好。看过就忘（学英语也是），不过还好学的还可以，其实我觉得高等数学的学习木的并不是为了所谓的不挂科，因此我们的学习不能停留在接触答案作为目标。我们必须知道解题过程的每一步的依据。最初我们要把定理的内容记住，至少能够做的下来题目，然而我试着认真的推导定理，尽管过程并不轻松但是我却认为非常值得，因为只有通过字的探索的知识才是掌握的最好。</p><p><img src="https://raw.githubusercontent.com/PureK1t/hexo_pictures_source/main/%E6%B5%85%E8%B0%88%E9%AB%98%E7%AD%89%E6%95%B0%E5%AD%A6%E7%9A%84%E8%AE%A4%E8%AF%86.jpg"></p>]]></content>
     
     
     <categories>
@@ -120,11 +140,11 @@
     
     <tags>
       
+      <tag>编程</tag>
+      
       <tag>水博客</tag>
       
       <tag>高数</tag>
-      
-      <tag>编程</tag>
       
     </tags>
     
