@@ -1,0 +1,485 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/mao.png">
+  <link rel="icon" href="/img/mao.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  
+    <meta name="description" content="">
+  
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+  <title>Java学习:使用DOM写XML -- 绘制中国国旗的SVG文件 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>pure's space</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/background.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Java学习:使用DOM写XML -- 绘制中国国旗的SVG文件">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-12-16 18:01" pubdate>
+        2020年12月16日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      761 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      13
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Java学习:使用DOM写XML -- 绘制中国国旗的SVG文件</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：14 分钟前
+                
+              </p>
+            
+            <div class="markdown-body">
+              <p><img src="https://raw.githubusercontent.com/PureK1t/hexo_pictures_source/main/FlagPRC.png" srcset="/img/loading.gif"></p>
+<h2 id="Java-学习"><a href="#Java-学习" class="headerlink" title="Java 学习"></a>Java 学习</h2><h3 id="使用DOM写XML-–-绘制中国国旗的SVG文件"><a href="#使用DOM写XML-–-绘制中国国旗的SVG文件" class="headerlink" title="使用DOM写XML – 绘制中国国旗的SVG文件"></a>使用<code>DOM</code>写<code>XML</code> – 绘制中国国旗的<code>SVG</code>文件</h3><blockquote>
+<p>利用 <code>Flag.java</code>文件绘制出一个<code>SVG</code>格式的中华人民共和国国旗。<code>SVG</code>文件参考了维基百科上的中国国旗的<code>SVG</code>文件</p>
+<p>[维基百科中华人民共和国国旗](<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%8D%8E%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD%E5%9B%BD%E6%97%97#/media/File:Flag_of_the_People's_Republic_of_China.svg">中华人民共和国国旗 - 维基百科，自由的百科全书 (wikipedia.org)</a>)</p>
+<p>源码已push至GitHub <a target="_blank" rel="noopener" href="https://github.com/Purekits/FlagPRC">FlagPRC</a></p>
+</blockquote>
+<h4 id="Java-Code"><a href="#Java-Code" class="headerlink" title="Java Code"></a>Java Code</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> io.pure.flagprc;<br><br><span class="hljs-keyword">import</span> java.io.File;<br><span class="hljs-keyword">import</span> java.io.FileNotFoundException;<br><span class="hljs-keyword">import</span> java.io.FileOutputStream;<br><br><span class="hljs-keyword">import</span> javax.xml.parsers.DocumentBuilder;<br><span class="hljs-keyword">import</span> javax.xml.parsers.DocumentBuilderFactory;<br><span class="hljs-keyword">import</span> javax.xml.parsers.ParserConfigurationException;<br><span class="hljs-keyword">import</span> javax.xml.transform.Transformer;<br><span class="hljs-keyword">import</span> javax.xml.transform.TransformerConfigurationException;<br><span class="hljs-keyword">import</span> javax.xml.transform.TransformerException;<br><span class="hljs-keyword">import</span> javax.xml.transform.TransformerFactory;<br><span class="hljs-keyword">import</span> javax.xml.transform.TransformerFactoryConfigurationError;<br><span class="hljs-keyword">import</span> javax.xml.transform.dom.DOMSource;<br><span class="hljs-keyword">import</span> javax.xml.transform.stream.StreamResult;<br><br><span class="hljs-keyword">import</span> org.w3c.dom.Document;<br><span class="hljs-keyword">import</span> org.w3c.dom.Element;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 使用DOM绘制中国国旗的SVG文件</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@author</span> PureK1t_SVG</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@date</span> 2020年12月11日</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@time</span> PM17:20</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@remark</span></span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> */</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">FlagPRC</span> </span>&#123;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 使用DOM绘制中国国旗的SVG文件</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> args</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br><br>        <span class="hljs-keyword">try</span> &#123;<br>            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();<br>            factory.setNamespaceAware(<span class="hljs-keyword">true</span>);<br>            DocumentBuilder builder = factory.newDocumentBuilder();<br>            <span class="hljs-comment">//生成SVG</span><br>            Document doc = builder.newDocument();<br>            String namespace = <span class="hljs-string">&quot;http://www.w3.org/2000/svg&quot;</span>;<br>            Element elementSvg = doc.createElementNS(namespace, <span class="hljs-string">&quot;svg&quot;</span>);<br>            elementSvg.setAttribute(<span class="hljs-string">&quot;xmlns:xlink&quot;</span>, <span class="hljs-string">&quot;http://www.w3.org/1999/xlink&quot;</span>);<br>            elementSvg.setAttribute(<span class="hljs-string">&quot;width&quot;</span>, <span class="hljs-string">&quot;900&quot;</span>);<br>            elementSvg.setAttribute(<span class="hljs-string">&quot;height&quot;</span>, <span class="hljs-string">&quot;600&quot;</span>);<br>            elementSvg.setAttribute(<span class="hljs-string">&quot;viewBox&quot;</span>, <span class="hljs-string">&quot;0 0 30 20&quot;</span>);<br>            doc.appendChild(elementSvg);<br>            Element elementDef = doc.createElement(<span class="hljs-string">&quot;defs&quot;</span>);<br>            elementSvg.appendChild(elementDef);<br>            Element elementPath = doc.createElement(<span class="hljs-string">&quot;path&quot;</span>);<br>            elementPath.setAttribute(<span class="hljs-string">&quot;id&quot;</span>, <span class="hljs-string">&quot;s&quot;</span>);<br>            elementPath.setAttribute(<span class="hljs-string">&quot;d&quot;</span>,<br>                    <span class="hljs-string">&quot;M0,-1 0.587785,0.809017 -0.951057,-0.309017H0.951057L-0.587785,0.809017z&quot;</span>);<br>            elementPath.setAttribute(<span class="hljs-string">&quot;fill&quot;</span>, <span class="hljs-string">&quot;#ffde00&quot;</span>);<br>            elementDef.appendChild(elementPath);<br>            Element elementRect = doc.createElement(<span class="hljs-string">&quot;rect&quot;</span>);<br>            elementRect.setAttribute(<span class="hljs-string">&quot;width&quot;</span>, <span class="hljs-string">&quot;30&quot;</span>);<br>            elementRect.setAttribute(<span class="hljs-string">&quot;height&quot;</span>, <span class="hljs-string">&quot;20&quot;</span>);<br>            elementRect.setAttribute(<span class="hljs-string">&quot;fill&quot;</span>, <span class="hljs-string">&quot;#de2910&quot;</span>);<br>            elementSvg.appendChild(elementRect);<br>            Element elementUse1 = doc.createElement(<span class="hljs-string">&quot;use&quot;</span>);<br>            elementUse1.setAttribute(<span class="hljs-string">&quot;xlink:href&quot;</span>, <span class="hljs-string">&quot;#s&quot;</span>);<br>            elementUse1.setAttribute(<span class="hljs-string">&quot;transform&quot;</span>, <span class="hljs-string">&quot;translate(5,5) scale(3)&quot;</span>);<br>            elementSvg.appendChild(elementUse1);<br>            Element elementUse2 = doc.createElement(<span class="hljs-string">&quot;use&quot;</span>);<br>            elementUse2.setAttribute(<span class="hljs-string">&quot;xlink:href&quot;</span>, <span class="hljs-string">&quot;#s&quot;</span>);<br>            elementUse2.setAttribute(<span class="hljs-string">&quot;transform&quot;</span>, <span class="hljs-string">&quot;translate(10,2) rotate(23.036243)&quot;</span>);<br>            elementSvg.appendChild(elementUse2);<br>            Element elementUse3 = doc.createElement(<span class="hljs-string">&quot;use&quot;</span>);<br>            elementUse3.setAttribute(<span class="hljs-string">&quot;xlink:href&quot;</span>, <span class="hljs-string">&quot;#s&quot;</span>);<br>            elementUse3.setAttribute(<span class="hljs-string">&quot;transform&quot;</span>, <span class="hljs-string">&quot;translate(12,4) rotate(45.869898)&quot;</span>);<br>            elementSvg.appendChild(elementUse3);<br>            Element elementUse4 = doc.createElement(<span class="hljs-string">&quot;use&quot;</span>);<br>            elementUse4.setAttribute(<span class="hljs-string">&quot;xlink:href&quot;</span>, <span class="hljs-string">&quot;#s&quot;</span>);<br>            elementUse4.setAttribute(<span class="hljs-string">&quot;transform&quot;</span>, <span class="hljs-string">&quot;translate(12,7) rotate(69.945396)&quot;</span>);<br>            elementSvg.appendChild(elementUse4);<br>            Element elementUse5 = doc.createElement(<span class="hljs-string">&quot;use&quot;</span>);<br>            elementUse5.setAttribute(<span class="hljs-string">&quot;xlink:href&quot;</span>, <span class="hljs-string">&quot;#s&quot;</span>);<br>            elementUse5.setAttribute(<span class="hljs-string">&quot;transform&quot;</span>, <span class="hljs-string">&quot;translate(10,9) rotate(20.659808)&quot;</span>);<br>            elementSvg.appendChild(elementUse5);<br>            <span class="hljs-comment">//输出到文件</span><br>            File file = <span class="hljs-keyword">new</span> File(<span class="hljs-string">&quot;C:\\Users\\Purek\\Desktop\\FlagPRC.svg&quot;</span>);<br>            Transformer t = TransformerFactory.newInstance().newTransformer();<br>            t.transform(<span class="hljs-keyword">new</span> DOMSource(doc), <span class="hljs-keyword">new</span> StreamResult(<span class="hljs-keyword">new</span> FileOutputStream(file)));<br>        &#125; <span class="hljs-keyword">catch</span> (ParserConfigurationException e) &#123;<br>            <span class="hljs-comment">// TODO Auto-generated catch block</span><br>            e.printStackTrace();<br>        &#125; <span class="hljs-keyword">catch</span> (TransformerConfigurationException e) &#123;<br>            <span class="hljs-comment">// TODO Auto-generated catch block</span><br>            e.printStackTrace();<br>        &#125; <span class="hljs-keyword">catch</span> (TransformerFactoryConfigurationError e) &#123;<br>            <span class="hljs-comment">// TODO Auto-generated catch block</span><br>            e.printStackTrace();<br>        &#125; <span class="hljs-keyword">catch</span> (FileNotFoundException e) &#123;<br>            <span class="hljs-comment">// TODO Auto-generated catch block</span><br>            e.printStackTrace();<br>        &#125; <span class="hljs-keyword">catch</span> (TransformerException e) &#123;<br>            <span class="hljs-comment">// TODO Auto-generated catch block</span><br>            e.printStackTrace();<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>运行此代码之前要修改 <code>84</code> 行的文件目录才可以可在桌面上生成一个 <code>FlagPRC.svg</code> 文件 此文件可以进行使用 如果想进一步编辑此文件 可以对此文件的<code>XML</code>代码进行格式化格式方法有很多 我使用的是 在线格式化工具 [菜鸟xml在线格式化](<a target="_blank" rel="noopener" href="https://c.runoob.com/front-end/710">XML 在线格式化 | 菜鸟工具 (runoob.com)</a>)</p>
+</blockquote>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Java/">Java</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Java/">Java</a>
+                    
+                      <a class="hover-with-bg" href="/tags/SVG/">SVG</a>
+                    
+                      <a class="hover-with-bg" href="/tags/XML/">XML</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/02/25/hello-world/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Hello World</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/08/02/%E6%B5%85%E8%B0%88%E9%AB%98%E6%95%B0%E5%92%8C%E7%BC%96%E7%A8%8B/">
+                        <span class="hidden-mobile">浅谈高数和编程</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+    
+  </div>
+  
+
+  
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+
+</body>
+</html>
