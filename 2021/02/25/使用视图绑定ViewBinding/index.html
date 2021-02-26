@@ -291,13 +291,13 @@
                     
                       <a class="hover-with-bg" href="/tags/Java/">Java</a>
                     
-                      <a class="hover-with-bg" href="/tags/%E6%B0%B4%E5%8D%9A%E5%AE%A2/">水博客</a>
-                    
                       <a class="hover-with-bg" href="/tags/Android/">Android</a>
                     
                       <a class="hover-with-bg" href="/tags/viewBinding/">viewBinding</a>
                     
                       <a class="hover-with-bg" href="/tags/%E7%BC%96%E7%A8%8B/">编程</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%B0%B4%E5%8D%9A%E5%AE%A2/">水博客</a>
                     
                   </div>
                 
@@ -336,24 +336,30 @@
                   
                 
                 
-  <div class="disqus" style="width:100%">
-    <div id="disqus_thread"></div>
-    <script type="text/javascript">
-      var disqus_config = function() {
-        this.page.url = 'https://purekits.github.io/2021/02/25/%E4%BD%BF%E7%94%A8%E8%A7%86%E5%9B%BE%E7%BB%91%E5%AE%9AViewBinding/';
-        this.page.identifier = '/2021/02/25/%E4%BD%BF%E7%94%A8%E8%A7%86%E5%9B%BE%E7%BB%91%E5%AE%9AViewBinding/';
-      };
-      Fluid.utils.waitElementVisible('disqus_thread', function () {
-        var d = document, s = d.createElement('script');
-        s.src = '//' + '' + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', new Date());
-        (d.head || d.body).appendChild(s);
+  <div id="vcomments"></div>
+  <script type="text/javascript">
+    Fluid.utils.waitElementVisible('vcomments', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function () {
+        new Valine({
+          el: "#vcomments",
+          app_id: "Fp8rUE51WS1gc2X7FBK5U8bq-gzGzoHsz",
+          app_key: "Tn9rJoHhvYYHrhtqPEfTG6ml",
+          placeholder: "说点什么",
+          path: window.location.pathname,
+          avatar: "retro",
+          meta: ["nick","mail","link"],
+          pageSize: "10",
+          lang: "zh-CN",
+          highlight: true,
+          recordIP: true,
+          serverURLs: "https://fp8rue51.lc-cn-n1-shared.com",
+        });
       });
-    </script>
-    <noscript>Please enable JavaScript to view the
-      <a target="_blank" href="https://disqus.com/?ref_noscript" rel="nofollow noopener noopener">comments powered by Disqus.</a>
-    </noscript>
-  </div>
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the
+    <a target="_blank" href="https://valine.js.org" rel="nofollow noopener noopener">comments powered by Valine.</a>
+  </noscript>
 
 
               </article>
